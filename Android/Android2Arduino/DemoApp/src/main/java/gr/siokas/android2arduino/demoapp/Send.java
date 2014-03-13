@@ -2,6 +2,7 @@
  *  Created by Apostolos Siokas
  */
 package gr.siokas.android2arduino.demoapp;
+
 import android.app.Activity;
 import android.widget.Toast;
 
@@ -10,7 +11,7 @@ import java.io.IOException;
 import java.net.Socket;
 
 // Send class implements Runnable in order to make the socket run in another thread than the main thread
-public class Send implements Runnable  {
+public class Send implements Runnable {
 
     String server = ""; // The ip of the server provided form the user
     String onoff = ""; // The message to send
@@ -41,7 +42,8 @@ public class Send implements Runnable  {
 
     // A method to make the connection between the client and the server
     public void connect() throws Exception {
-        client = new Socket(server, 2222); // This client connects to a server which demons in port 2222
+        // This client connects to a server which demons in port 2222
+        client = new Socket(server, 2222);
         display("Connected");
     }
 
@@ -51,8 +53,8 @@ public class Send implements Runnable  {
     public void run() {
         try {
             client = new Socket(server, 2222);
-            DataOutputStream dos = new DataOutputStream(
-                    client.getOutputStream()); // Create an output stream in order to send it to the server
+            // Create an output stream in order to send it to the server
+            DataOutputStream dos = new DataOutputStream(client.getOutputStream());
             dos.writeUTF(onoff); // Attach to the output stream whatever we want to send
         } catch (IOException e) {
             e.printStackTrace();

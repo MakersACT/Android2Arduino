@@ -30,8 +30,6 @@ import java.net.Socket;
 import java.util.List;
 
 
-
-
 public class MainActivity extends ActionBarActivity implements SensorEventListener {
 
     Socket client;
@@ -54,14 +52,11 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
 
         // This Method is called if the "on" button is pressed
         on.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
-
-                Send send = new Send(MainActivity.this, et
-                        .getText().toString(), "1"); // Make the call to the server and send 1
+                // Make the call to the server and send 1
+                Send send = new Send(MainActivity.this, et.getText().toString(), "1");
                 send.start(); // Start the Thread
-
             }
 
         });
@@ -72,8 +67,8 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
             @Override
             public void onClick(View v) {
 
-                Send send = new Send(MainActivity.this, et
-                        .getText().toString(), "0"); // Make the call to the server and send 1
+                // Make the call to the server and send 1
+                Send send = new Send(MainActivity.this, et.getText().toString(), "0");
                 send.start(); // Start the Thread
 
             }
@@ -103,13 +98,11 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
 
         // This initiates the Accelerometer Sensor
         SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        List<Sensor> sensors = sensorManager
-                .getSensorList(Sensor.TYPE_ACCELEROMETER);
+        List<Sensor> sensors = sensorManager.getSensorList(Sensor.TYPE_ACCELEROMETER);
 
         // This initiates the Sensor Manager
         Sensor sensor = sensors.get(0);
-        sensorManager.registerListener(this, sensor,
-                SensorManager.SENSOR_MIN);
+        sensorManager.registerListener(this, sensor, SensorManager.SENSOR_MIN);
 
     }
 
@@ -123,24 +116,22 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
         x = event.values.clone()[0];
 
         // Check if the x value is over 9 (the phone tilts to the left)
-        if (x >= 9) {
-            if (!sensorON) { // Check if the sensor is already on
-                System.out.println("ON");
-                Send send = new Send(MainActivity.this, et
-                        .getText().toString(), "1"); // Make the call to the server and send 1
-                send.start(); // Start the thread
-            }
+        // AND if the sensor is already on
+        if ((x >= 9) && (!sensorON)) {
+            System.out.println("ON");
+            // Make the call to the server and send 1
+            Send send = new Send(MainActivity.this, et.getText().toString(), "1");
+            send.start(); // Start the thread
             sensorON = true;
-        } else if (x <= -9) { // Check if the x value is over -9 (the phone tilts to the right)
-            if (sensorON) { // Check if the sensor is already off
-                System.out.println("OFF");
-                Send send = new Send(MainActivity.this, et
-                        .getText().toString(), "0"); // Make the call to the server and send 0
-                send.start();
-            }
+        }
+        // Else: Check if the x value is over -9 (the phone tilts to the right)
+        // AND if the sensor is already off
+        else if ((x <= -9) && (sensorON)) {
+            System.out.println("OFF");
+            // Make the call to the server and send 0
+            Send send = new Send(MainActivity.this, et.getText().toString(), "0");
+            send.start();
             sensorON = false;
         }
-
     }
-
 }
